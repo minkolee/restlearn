@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试REST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="#" th:href="@{/css/bootstrap.min.css}">
+
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">测试REST</h1>
+    <button class="btn btn-primary" id="ajax">发送AJAX</button>
+    <table class="table" style="margin-top: 10px" id="result"></table>
+</div>
+
+
+
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+    let table = document.getElementById("result");
+    let xhrButton = document.getElementById("ajax");
+    xhrButton.onclick = sendajax;
+    let cansend = true;
+    function sendajax() {
+        if (!cansend) {
+            return false;
+        }
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("响应阶段是："+xhr.readyState+' 状态码是：'+xhr.status);
+                console.log("成功收到响应的内容：" + xhr.responseText);
+                let studentList = JSON.parse(xhr.responseText);
+                showList(studentList);
+                cansend = true;
+            }
+            else {
+                console.log("响应阶段是："+xhr.readyState+' 状态码是：'+xhr.status)
+            }
+        };
+        let url = "/api/course/list";
+        xhr.open("get", url, true);
+        xhr.send(null);
+        cansend = false;
+    }
+
+    function showList(studentList) {
+        table.innerText = "";
+        for (let i = 0; i < studentList.length; i++) {
+            table.appendChild(showTable(studentList[i]));
+        }
+
+    }
+
+    function showTable(student) {
+        let tr = document.createElement("tr");
+        let td_name = document.createElement("td");
+
+        td_name.innerText = student.courseName;
+
+        tr.appendChild(td_name);
+        return tr;
+    }
+
+
+
+
+
+</script>
+</body>
+</html>

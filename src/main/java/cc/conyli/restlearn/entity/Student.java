@@ -19,8 +19,7 @@ public class Student {
 
     private final String lastName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "course_id")
-    private final Course course;
+    //这里先不设置外键，否则JSON化之后会来回引用，无尽循环
+    private final int courseId;
 
 }

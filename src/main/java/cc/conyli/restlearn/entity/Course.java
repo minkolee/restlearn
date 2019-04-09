@@ -20,7 +20,7 @@ public class Course {
     private final String courseName;
 
 
-    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "courseId")
     private final List<Student> students = new ArrayList<>();
 
     void add(Student student) {
