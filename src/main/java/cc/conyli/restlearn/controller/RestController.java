@@ -5,10 +5,17 @@ import cc.conyli.restlearn.entity.Student;
 import cc.conyli.restlearn.repository.CourseRepo;
 import cc.conyli.restlearn.repository.StudentRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -26,8 +33,17 @@ public class RestController {
     }
 
     @GetMapping("/students")
-    public Iterable<Student> showStudentList() {
-        return studentRepo.findAll();
+    public Resources<Resource<Student>> showStudentList() {
+        PageRequest page = PageRequest.of(0, 12, Sort.by("id").descending());
+
+        List<Student> students = (List<Student>)studentRepo.findAll();
+
+        Resources<Resource<Student>> studentsHATEOAS = Resources.wrap(students);
+
+//        studentsHATEOAS.add(ControllerLinkBuilder.linkTo(RestController.class).slash("students").withRel("students"));
+
+        studentsHATEOAS.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(RestController.class).showStudentList()).withRel("students"));
+        return studentsHATEOAS;
     }
 
     @GetMapping("/courses")

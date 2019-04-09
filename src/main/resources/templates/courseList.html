@@ -23,6 +23,7 @@
             <td><span style="margin: 0px 10px" th:each="student:${course.students}" th:text="${student.firstName} +' '+ ${student.lastName}">学生全名</span></td>
         </tr>
     </table>
+    <p><a class="btn btn-info" th:href="@{/}">返回首页</a></p>
 </div>
 
 
