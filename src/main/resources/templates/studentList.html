@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="#" th:href="@{/css/bootstrap.min.css}">
+
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">学生列表</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>姓</th>
+            <th>名</th>
+            <th>所选课程</th>
+        </tr>
+        </thead>
+        <tr th:each="student:${students}">
+            <td th:text="${student.firstName}">姓</td>
+            <td th:text="${student.firstName}">名</td>
+            <td th:text="${student.course.courseName}">课程名称</td>
+        </tr>
+    </table>
+</div>
+
+
+
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+</body>
+</html>
