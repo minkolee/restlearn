@@ -23,9 +23,9 @@
     let table = document.getElementById("result");
     let xhrButton = document.getElementById("ajax");
     xhrButton.onclick = sendajax;
-    let cansend = true;
+    let can_send = true;
     function sendajax() {
-        if (!cansend) {
+        if (!can_send) {
             return false;
         }
         let xhr = new XMLHttpRequest();
@@ -33,35 +33,49 @@
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log("响应阶段是："+xhr.readyState+' 状态码是：'+xhr.status);
                 console.log("成功收到响应的内容：" + xhr.responseText);
-                let studentList = JSON.parse(xhr.responseText);
-                showList(studentList);
-                cansend = true;
+                let courseList = JSON.parse(xhr.responseText);
+                showList(courseList);
+                can_send = true;
             }
             else {
                 console.log("响应阶段是："+xhr.readyState+' 状态码是：'+xhr.status)
             }
         };
-        let url = "/api/course/list";
+        let url = "/api/courses";
         xhr.open("get", url, true);
         xhr.send(null);
-        cansend = false;
+        can_send = false;
     }
 
-    function showList(studentList) {
+    function showList(list) {
         table.innerText = "";
-        for (let i = 0; i < studentList.length; i++) {
-            table.appendChild(showTable(studentList[i]));
+        for (let i = 0; i < list.length; i++) {
+            table.appendChild(showTable(list[i]));
         }
 
     }
 
-    function showTable(student) {
+    function showTable(course) {
         let tr = document.createElement("tr");
         let td_name = document.createElement("td");
+        let students = course.students;
+        td_name.innerText = course.courseName;
 
-        td_name.innerText = student.courseName;
+        let td_students = document.createElement("td");
 
+        for (let i = 0; i < students.length; i++) {
+            let span = document.createElement("span");
+            if (i < students.length - 1) {
+                span.innerText = students[i].firstName + " " + students[i].lastName + " | ";
+            } else {
+
+                span.innerText = students[i].firstName + " " + students[i].lastName;
+            }
+            td_students.appendChild(span);
+        }
         tr.appendChild(td_name);
+        tr.appendChild(td_students);
+        table.appendChild(tr);
         return tr;
     }
 

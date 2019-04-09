@@ -15,12 +15,12 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final int id;
+    private int id;
 
-    private final String courseName;
+    private String courseName;
 
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "courseId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "courseId")
     private final List<Student> students = new ArrayList<>();
 
     void add(Student student) {

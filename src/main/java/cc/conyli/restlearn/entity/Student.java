@@ -13,13 +13,13 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final int id;
+    private int id;
 
-    private final String firstName;
+    private String firstName;
 
-    private final String lastName;
+    private String lastName;
 
     //这里先不设置外键，否则JSON化之后会来回引用，无尽循环
-    private final int courseId;
+    private Integer courseId;
 
 }
