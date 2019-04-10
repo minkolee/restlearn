@@ -1,14 +1,11 @@
 package cc.conyli.restlearn.controller;
 
-import cc.conyli.restlearn.entity.Course;
+import cc.conyli.restlearn.api.StudentResource;
+import cc.conyli.restlearn.api.StudentResourceAssembler;
 import cc.conyli.restlearn.entity.Student;
-import cc.conyli.restlearn.repository.CourseRepo;
 import cc.conyli.restlearn.repository.StudentRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -20,38 +17,30 @@ import java.util.Optional;
 
 @Slf4j
 @org.springframework.web.bind.annotation.RestController
-@RequestMapping(path = "/api", produces = "application/json")
+@RequestMapping(path = "/myapi/students", produces = "application/json")
 @CrossOrigin("*")
-public class RestController {
+public class StudentRestController {
 
     private StudentRepo studentRepo;
-    private CourseRepo courseRepo;
 
-    public RestController(StudentRepo studentRepo, CourseRepo courseRepo) {
-        this.courseRepo = courseRepo;
+    @Autowired
+    public StudentRestController(StudentRepo studentRepo) {
         this.studentRepo = studentRepo;
     }
 
-    @GetMapping("/students")
-    public Resources<Resource<Student>> showStudentList() {
-        PageRequest page = PageRequest.of(0, 12, Sort.by("id").descending());
-
+    @GetMapping
+    public Resources<StudentResource> showStudentList() {
         List<Student> students = (List<Student>)studentRepo.findAll();
 
-        Resources<Resource<Student>> studentsHATEOAS = Resources.wrap(students);
+        List<StudentResource> studentResources = new StudentResourceAssembler().toResources(students);
+        Resources<StudentResource> studentsHATEOAS = new Resources<>(studentResources);
 
-//        studentsHATEOAS.add(ControllerLinkBuilder.linkTo(RestController.class).slash("students").withRel("students"));
+        studentsHATEOAS.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(StudentRestController.class).showStudentList()).withRel("students"));
 
-        studentsHATEOAS.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(RestController.class).showStudentList()).withRel("students"));
         return studentsHATEOAS;
     }
 
-    @GetMapping("/courses")
-    public Iterable<Course> showCourseList() {
-        return courseRepo.findAll();
-    }
-
-    @GetMapping("/student/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable("id") int id) {
         Optional<Student> student = studentRepo.findById(id);
         if (student.isPresent()) {
@@ -61,32 +50,14 @@ public class RestController {
         }
     }
 
-    @GetMapping("/course/{id}")
-    public ResponseEntity<Course> getCourse(@PathVariable int id) {
-        Optional<Course> course = courseRepo.findById(id);
-        if (course.isPresent()) {
-            return new ResponseEntity<>(course.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PostMapping(path = "/students", consumes = "application/json")
+    @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Student addStudent(@RequestBody Student student) {
         log.info(student.toString());
         return studentRepo.save(student);
     }
 
-    @PostMapping(path = "/courses", consumes = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Course addStudent(@RequestBody Course course) {
-        log.info(course.toString());
-        return courseRepo.save(course);
-    }
-
-    //传入整个对象，如果有字段错误，就会导致not null字段保存错误
-    @PutMapping(path = "/student/{id}", consumes = "application/json")
+    @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<Student> replaceStudent(@PathVariable("id") int id, @RequestBody Student student) {
         Optional<Student> targetStudent = studentRepo.findById(id);
         if (targetStudent.isPresent()) {
@@ -100,8 +71,7 @@ public class RestController {
         }
     }
 
-    //仅根据部分值就可以更新，哪怕传错也没事
-    @PatchMapping(path = "/student/{id}", consumes = "application/json")
+    @PatchMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<Student> patchStudent(@PathVariable("id") int id, @RequestBody Student student) {
         Optional<Student> targetStudent = studentRepo.findById(id);
         if (targetStudent.isPresent()) {
@@ -121,7 +91,7 @@ public class RestController {
         }
     }
 
-    @DeleteMapping(path = "/student/{id}", consumes = "application/json")
+    @DeleteMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<Student> removeStudent(@PathVariable("id") int id) {
         Optional<Student> targetStudent = studentRepo.findById(id);
         if (targetStudent.isPresent()) {
