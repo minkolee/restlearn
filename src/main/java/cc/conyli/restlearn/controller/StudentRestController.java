@@ -28,17 +28,36 @@ public class StudentRestController {
         this.studentRepo = studentRepo;
     }
 
+
+    //HATEOAS方法
+//    @GetMapping
+//    public Resources<StudentResource> showStudentList() {
+//        List<Student> students = (List<Student>)studentRepo.findAll();
+//
+//        List<StudentResource> studentResources = new StudentResourceAssembler().toResources(students);
+//        Resources<StudentResource> studentsHATEOAS = new Resources<>(studentResources);
+//
+//        studentsHATEOAS.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(StudentRestController.class).showStudentList()).withRel("students"));
+//
+//        return studentsHATEOAS;
+//    }
+
     @GetMapping
-    public Resources<StudentResource> showStudentList() {
-        List<Student> students = (List<Student>)studentRepo.findAll();
-
-        List<StudentResource> studentResources = new StudentResourceAssembler().toResources(students);
-        Resources<StudentResource> studentsHATEOAS = new Resources<>(studentResources);
-
-        studentsHATEOAS.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(StudentRestController.class).showStudentList()).withRel("students"));
-
-        return studentsHATEOAS;
+    public List<Student> showStudentList() {
+        return studentRepo.findAll();
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable("id") int id) {
@@ -56,6 +75,7 @@ public class StudentRestController {
         log.info(student.toString());
         return studentRepo.save(student);
     }
+
 
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<Student> replaceStudent(@PathVariable("id") int id, @RequestBody Student student) {
@@ -91,7 +111,7 @@ public class StudentRestController {
         }
     }
 
-    @DeleteMapping(path = "/{id}", consumes = "application/json")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Student> removeStudent(@PathVariable("id") int id) {
         Optional<Student> targetStudent = studentRepo.findById(id);
         if (targetStudent.isPresent()) {

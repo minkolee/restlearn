@@ -29,16 +29,23 @@ public class CourseRestController {
         this.courseRepo = courseRepo;
     }
 
+    //HATEOAS
+//    @GetMapping
+//    public Resources<CourseResource> showCourseList() {
+//        List<Course> courseList = (List<Course>) courseRepo.findAll();
+//
+//        List<CourseResource> courseResources = new CourseResourceAssembler().toResources(courseList);
+//        Resources<CourseResource> resourcesHATEOAS = new Resources<>(courseResources);
+//
+//        resourcesHATEOAS.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(CourseRestController.class).showCourseList()).withRel("courses"));
+//        return resourcesHATEOAS;
+//    }
+
     @GetMapping
-    public Resources<CourseResource> showCourseList() {
-        List<Course> courseList = (List<Course>) courseRepo.findAll();
-
-        List<CourseResource> courseResources = new CourseResourceAssembler().toResources(courseList);
-        Resources<CourseResource> resourcesHATEOAS = new Resources<>(courseResources);
-
-        resourcesHATEOAS.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(CourseRestController.class).showCourseList()).withRel("courses"));
-        return resourcesHATEOAS;
+    public List<Course> showCourseList() {
+        return courseRepo.findAll();
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourse(@PathVariable int id) {
