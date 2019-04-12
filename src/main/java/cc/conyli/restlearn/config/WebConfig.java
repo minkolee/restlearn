@@ -2,6 +2,8 @@ package cc.conyli.restlearn.config;
 
 import cc.conyli.restlearn.entity.Student;
 import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
@@ -24,7 +26,8 @@ public class WebConfig implements WebMvcConfigurer {
   @Bean
   public Destination studentQueue() {
 
-    return new ActiveMQQueue("192.168.0.234:61616");
+//    return new ActiveMQQueue("192.168.0.234:61616");
+    return new ActiveMQQueue("192.168.100.100:61616");
 //    return new ActiveMQQueue("localhost:61616");
   }
 
@@ -38,6 +41,11 @@ public class WebConfig implements WebMvcConfigurer {
     messageConverter.setTypeIdMappings(typeIdMappings);
 
     return messageConverter;
+  }
+
+  @Bean
+  public MessageConverter messageConverterAQMP() {
+    return new Jackson2JsonMessageConverter();
   }
 
 }

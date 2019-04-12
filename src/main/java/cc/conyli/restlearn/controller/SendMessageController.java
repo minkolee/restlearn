@@ -2,7 +2,10 @@ package cc.conyli.restlearn.controller;
 
 import cc.conyli.restlearn.entity.Student;
 import cc.conyli.restlearn.service.JmsMessageService;
+import cc.conyli.restlearn.service.RabbitMessageService;
+import cc.conyli.restlearn.service.RabbitReceiveService;
 import cc.conyli.restlearn.service.ReceiveMessageService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +18,26 @@ import javax.jms.JMSException;
 @RequestMapping("/message")
 public class SendMessageController {
 
-    private JmsMessageService jmsMessageService;
-    private ReceiveMessageService receiveMessageService;
+//    JMS的Service
+//    private JmsMessageService jmsMessageService;
+//    private ReceiveMessageService receiveMessageService;
+//
+//    @Autowired
+//    public SendMessageController(JmsMessageService jmsMessageService, ReceiveMessageService receiveMessageService) {
+//        this.receiveMessageService = receiveMessageService;
+//        this.jmsMessageService = jmsMessageService;
+//    }
+
+    private RabbitMessageService rabbitMessageService;
+    private RabbitReceiveService rabbitReceiveService;
+
 
     @Autowired
-    public SendMessageController(JmsMessageService jmsMessageService, ReceiveMessageService receiveMessageService) {
-        this.receiveMessageService = receiveMessageService;
-        this.jmsMessageService = jmsMessageService;
+    public SendMessageController(RabbitMessageService rabbitMessageService, RabbitReceiveService rabbitReceiveService) {
+        this.rabbitMessageService = rabbitMessageService;
+        this.rabbitReceiveService = rabbitReceiveService;
     }
+
 
     @GetMapping("/test")
     public String  showPage() {
@@ -37,7 +52,7 @@ public class SendMessageController {
         target.setCourseId(3);
         target.setId(666);
 
-        jmsMessageService.sendStudentObejct(target);
+        rabbitMessageService.sendStudentObejct(target);
 
         model.addAttribute("student", target);
 
@@ -46,7 +61,7 @@ public class SendMessageController {
 
     @GetMapping("/receive")
     public String receiveMessage(Model model) throws JMSException {
-        Student student = receiveMessageService.receiveStudent();
+        Student student = rabbitReceiveService.receiveStudent();
         model.addAttribute("res", student);
 
         return "message";

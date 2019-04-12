@@ -48,17 +48,6 @@ public class StudentRestController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable("id") int id) {
         Optional<Student> student = studentRepo.findById(id);
