@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>发送接受消息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="#" th:href="@{/css/bootstrap.min.css}">
+
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">发送和接受消息测试</h1>
+    <a th:href="@{/message/send}" class="btn btn-primary">发送消息</a>
+    <a th:href="@{/message/receive}" class="btn btn-primary">接收消息</a>
+
+
+    <p>发送的对象是：</p>
+    <p th:if="${student} != null"><span th:text="${student.firstName}"></span>|<span th:text="${student.lastName}"></span></p>
+    <hr>
+    <p>接收的对象是：</p>
+    <p th:if="${res} != null"><span th:text="${res.firstName}"></span>|<span th:text="${res.lastName}"></span></p>
+</div>
+
+
+
+<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+</body>
+</html>
