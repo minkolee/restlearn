@@ -23,7 +23,9 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public Destination studentQueue() {
-    return new ActiveMQQueue("localhost:61616");
+
+    return new ActiveMQQueue("192.168.0.234:61616");
+//    return new ActiveMQQueue("localhost:61616");
   }
 
   @Bean

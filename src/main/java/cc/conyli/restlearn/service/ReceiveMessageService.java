@@ -28,8 +28,9 @@ public class ReceiveMessageService implements JmsReceiveService {
     }
 
     @Override
-    public Student receiveStudent() throws JMSException {
-        Message message = jmsTemplate.receive(destination);
-        return (Student) messageConverter.fromMessage(message);
+    public Student receiveStudent() {
+        return (Student) jmsTemplate.receiveAndConvert(destination);
     }
+
+
 }
