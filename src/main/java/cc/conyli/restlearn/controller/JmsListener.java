@@ -13,8 +13,8 @@ public class JmsListener {
         System.out.println(student);
     }
 
-//    @RabbitListener(queues = {"sia5"})
-//    public void receiveRabbitStudent(Student student) {
-//        System.out.println(student);
-//    }
+    @RabbitListener(queues = {"sia5"})
+    public void receiveRabbitStudent(Student student) {
+        System.out.println(student);
+    }
 }
