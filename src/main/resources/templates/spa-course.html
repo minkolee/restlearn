@@ -43,7 +43,7 @@
                 console.log("响应阶段是："+xhr.readyState+' 状态码是：'+xhr.status)
             }
         };
-        let url = "/api/courses";
+        let url = "/myapi/courses";
         xhr.open("get", url, true);
         xhr.send(null);
         can_send = false;
