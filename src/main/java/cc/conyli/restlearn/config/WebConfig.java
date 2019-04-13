@@ -17,35 +17,35 @@ import java.util.Map;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-  //配置路径与默认对应关系
-  @Override
-  public void addViewControllers(ViewControllerRegistry registry) {
-    registry.addViewController("/").setViewName("home");
-  }
+    //配置路径与默认对应关系
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("home");
+    }
 
-  @Bean
-  public Destination studentQueue() {
+    @Bean
+    public Destination studentQueue() {
 
 //    return new ActiveMQQueue("192.168.0.234:61616");
-    return new ActiveMQQueue("192.168.100.100:61616");
+        return new ActiveMQQueue("192.168.100.100:61616");
 //    return new ActiveMQQueue("localhost:61616");
-  }
+    }
 
-  @Bean
-  public MappingJackson2MessageConverter messageConverter() {
-    MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
-    messageConverter.setTypeIdPropertyName("_typeId");
+    @Bean
+    public MappingJackson2MessageConverter messageConverter() {
+        MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
+        messageConverter.setTypeIdPropertyName("_typeId");
 
-    Map<String, Class<?>> typeIdMappings = new HashMap<>();
-    typeIdMappings.put("student", Student.class);
-    messageConverter.setTypeIdMappings(typeIdMappings);
+        Map<String, Class<?>> typeIdMappings = new HashMap<>();
+        typeIdMappings.put("student", Student.class);
+        messageConverter.setTypeIdMappings(typeIdMappings);
 
-    return messageConverter;
-  }
+        return messageConverter;
+    }
 
-  @Bean
-  public MessageConverter messageConverterAQMP() {
-    return new Jackson2JsonMessageConverter();
-  }
+    @Bean
+    public MessageConverter messageConverterAQMP() {
+        return new Jackson2JsonMessageConverter();
+    }
 
 }

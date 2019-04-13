@@ -10,18 +10,18 @@ import org.springframework.integration.file.support.FileExistsMode;
 
 import java.io.File;
 
-@Configuration
+//@Configuration
 public class FileWriterDSLConfig {
 
-    @Bean
-    public IntegrationFlow fileWriterFlow() {
-        return IntegrationFlows
-                .from(MessageChannels.direct("textInChannel"))
-                .<String, String>transform(t -> t.toUpperCase())
-                .channel(MessageChannels.direct("fileWriterChannel"))
-                .handle(Files.outboundAdapter(new File("/tmp/sia5/files"))
-                        .fileExistsMode(FileExistsMode.APPEND)
-                        .appendNewLine(true))
-                .get();
-    }
+//    @Bean
+//    public IntegrationFlow fileWriterFlow() {
+//        return IntegrationFlows
+//                .from(MessageChannels.direct("textInChannel"))
+//                .<String, String>transform(t -> t.toUpperCase())
+//                .channel(MessageChannels.direct("fileWriterChannel"))
+//                .handle(Files.outboundAdapter(new File("/tmp/sia5/files"))
+//                        .fileExistsMode(FileExistsMode.APPEND)
+//                        .appendNewLine(true))
+//                .get();
+//    }
 }
