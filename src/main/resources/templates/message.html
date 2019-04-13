@@ -5,9 +5,9 @@
     <title>发送接受消息</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="#" th:href="@{/css/bootstrap.min.css}">
-
 </head>
 <body>
+<script th:src="@{/js/vue.js}"></script>
 <div class="container">
     <h1 class="text-center">发送和接受消息测试</h1>
     <a th:href="@{/message/send}" class="btn btn-primary">发送消息</a>
@@ -19,6 +19,13 @@
     <hr>
     <p>接收的对象是：</p>
     <p th:if="${res} != null"><span th:text="${res.firstName}"></span>|<span th:text="${res.lastName}"></span></p>
+
+    <div id="app">
+    <h1>写入文件测试</h1>
+    <p>请在下边的input里随便输入点什么：</p>
+    <input type="text" name="data" v-model="content" >
+    <a v-bind:href="target" class="btn btn-primary">点击写入文件</a>
+    </div>
 </div>
 
 
@@ -26,5 +33,19 @@
 <script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
 <script th:src="@{/js/popper.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data:{
+            url:"/write?data=",
+            content:""
+        },
+        computed :{
+            target: function () {
+                return this.url + this.content;
+            }
+        }
+    })
+</script>
 </body>
 </html>
